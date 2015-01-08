@@ -51,7 +51,7 @@ class SimpleBNFTestCase(unittest.TestCase):
         )
 
     # 3-level case
-    def t1est_0005(self):
+    def test_0005(self):
         self.assertResultEqualToGrammar(
             {'name': 'root', 'data':
                 {'name': 'foo', 'data':
@@ -60,3 +60,18 @@ class SimpleBNFTestCase(unittest.TestCase):
             },
             ','
         )
+
+    # sequences
+    def test_0006(self):
+        self.assertResultEqualToGrammar(
+            {'name': 'root', 'data':
+                {'name': 'foo', 'data':
+                    [
+                        {'name': 'bar', 'data': '.'},
+                        {'name': 'buz', 'data': ','}
+                    ]
+                }
+            },
+            '.,'
+        )
+
