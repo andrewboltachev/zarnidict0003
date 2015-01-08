@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0001 import simple_bnf, SimpleBNFError
+from ..lib.ex0001 import simple_bnf, SimpleBNFError, Or
 
 
 class SimpleBNFTestCase(unittest.TestCase):
@@ -109,4 +109,41 @@ class SimpleBNFTestCase(unittest.TestCase):
                 }]
             },
             '.'
+        )
+
+    # or-expressions
+    def test_0010(self):
+        self.assertResult(
+            {'name': 'root', 'data':
+                Or({'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                },
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': ','}
+                })
+            },
+            '.',
+            {'name': 'root', 'data':
+                {'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                }
+            }
+        )
+
+    def test_0011(self):
+        self.assertResult(
+            {'name': 'root', 'data':
+                Or({'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                },
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': ','}
+                })
+            },
+            ',',
+            {'name': 'root', 'data':
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': ','},
+                }
+            }
         )
