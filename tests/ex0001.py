@@ -75,3 +75,38 @@ class SimpleBNFTestCase(unittest.TestCase):
             '.,'
         )
 
+    def test_0007(self):
+        self.assertResultEqualToGrammar(
+            {'name': 'root', 'data':
+                [{'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                },
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': ','}
+                }]
+            },
+            '.,'
+        )
+    
+    def test_0008(self):
+        self.assertResultIsBad(
+            {'name': 'root', 'data':
+                [{'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                },
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': ','}
+                }]
+            },
+            '..'
+        )
+    
+    def test_0009(self):
+        self.assertResultEqualToGrammar(
+            {'name': 'root', 'data':
+                [{'name': 'foo', 'data':
+                    {'name': 'bar', 'data': '.'},
+                }]
+            },
+            '.'
+        )
