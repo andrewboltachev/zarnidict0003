@@ -26,3 +26,10 @@ class SimpleRDTestCase(unittest.TestCase):
             f(['[pre]', 'foo', 'bar', '[/pre]', 'buz']),
             [{'name': 'pre', 'data': ['foo', 'bar']}, 'buz']
         )
+
+class NestedRDTestCase(unittest.TestCase):
+    def test_0001(self):
+        self.assertEqual(
+            f(['[pre]', 'foo', 'bar', '[/pre]', 'buz']),
+            [{'name': 'pre', 'data': ['foo', 'bar']}, 'buz']
+        )
