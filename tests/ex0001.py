@@ -147,3 +147,20 @@ class SimpleBNFTestCase(unittest.TestCase):
                 }
             }
         )
+
+    # may-be expressions
+    def test_0011(self):
+        self.assertResult(
+            {'name': 'root', 'data': [
+                    MayBe({'name': 'foo', 'data': '.'}),
+                    {'name': 'bar', 'data': ','},
+                ]
+            },
+            ',',
+            {'name': 'root', 'data':
+                {'name': 'foo', 'data':
+                    {'name': 'buz', 'data': '.,'},
+                }
+            }
+        )
+
