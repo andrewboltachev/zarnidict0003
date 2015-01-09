@@ -23,7 +23,7 @@ class ArticlesParsingError(Exception):
     pass
 
 
-def parse_articles(text):
+def parse_articles(lines):
     result = OrderedDict([])
 
     state = LineKind.NOTHING
@@ -33,7 +33,7 @@ def parse_articles(text):
 
     kind = LineKind.for_line
 
-    for i, line in enumerate(text.split('\n')):
+    for i, line in enumerate(lines):
         if state == LineKind.NOTHING:
             if kind(line) == LineKind.NOTHING:
                 pass

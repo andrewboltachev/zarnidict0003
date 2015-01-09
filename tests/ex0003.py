@@ -62,19 +62,19 @@ two_articles = '''\
 class ParseArticlesTestCase(unittest.TestCase):
     def test_0001(self):
         self.assertEqual(
-            parse_articles(''),
+            parse_articles(''.split('\n')),
             OrderedDict([])
         )
 
     def test_0002(self):
         self.assertEqual(
-            parse_articles(one_article),
+            parse_articles(one_article.split('\n')),
             OrderedDict([('ы', ['\tи'])]),
         )
 
     def test_0003(self):
         self.assertEqual(
-            parse_articles(two_articles),
+            parse_articles(two_articles.split('\n')),
             OrderedDict([
                 ('ы', ['\tи', '\tӱ']),
                 ('ч', ['\tб', '\tл'])

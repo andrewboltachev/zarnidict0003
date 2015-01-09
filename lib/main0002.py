@@ -9,7 +9,10 @@ for line in fileinput.input():
     line = line.rstrip('\n')
     text.append(line)
 
-for line in text:
-    print(line)
+#for line in text:
+#    print(line)
 
-#json.dumps(articles)
+
+articles = parse_articles(text)
+
+print(json.dumps(articles))
