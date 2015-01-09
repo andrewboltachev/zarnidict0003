@@ -24,7 +24,7 @@ articles = parse_articles(text)
 # do sth with them...
 
 def line_to_tokens(line):
-    return [x for x in re.split(r'(\[\w+\]|\[\/\w+\]|[\n]|[^\[]+)', line) if x]
+    return [x for x in re.split(r'(\[\w+\]|\[\/\w+\]|[\n]|[^\[]+)', line) if x.strip()]
 
 
 for article in list(articles.items())[20:30]:
