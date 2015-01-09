@@ -18,16 +18,21 @@ def is_closing_tag(x):
     return re.match(r'^\[\/[a-z]+\]$', x) is not None
 
 
+def get_tag(x):
+    return x.replace('[', '').replace(']', '')
+
+
 @ensure_iterator
 def f(tokens):
     try:
         token = next(tokens)
     except StopIteration:
         return []
-    if token == '[pre]':
+    if is_opening_tag(token):
+        tag = get_tag(token)
         result = f(tokens)
-        return [{'name': 'pre', 'data': result}] + f(tokens)
-    elif token == '[/pre]':
+        return [{'name': tag, 'data': result}] + f(tokens)
+    elif is_closing_tag(token):
         return []
     else:
         return [token] + f(tokens)

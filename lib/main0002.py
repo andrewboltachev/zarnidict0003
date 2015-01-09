@@ -24,15 +24,21 @@ articles = parse_articles(text)
 # do sth with them...
 
 def line_to_tokens(line):
-    return [x for x in re.split(r'(\[\w+\]|\[\/\w+\]|[^\[]+)', line) if x]
+    return [x for x in re.split(r'(\[\w+\]|\[\/\w+\]|[\n]|[^\[]+)', line) if x]
 
 
 for article in list(articles.items())[20:30]:
     body = article[1]
-    for line in body:
-        print(line)
-        print(line_to_tokens(line))
-        print('')
-        print('')
-        print('')
-    #print(f(body))
+    line = '\n'.join(body)
+    tokens = line_to_tokens(line)
+    parsed = f(tokens)
+    print(line)
+    print(tokens)
+    print('')
+    print('')
+    print('')
+    #print(json.dumps(parsed, ensure_ascii=False))
+    pprint.pprint(parsed)
+    print('')
+    print('')
+    print('')
