@@ -69,14 +69,14 @@ class ParseArticlesTestCase(unittest.TestCase):
     def test_0002(self):
         self.assertEqual(
             parse_articles(one_article.split('\n')),
-            OrderedDict([('ы', ['\tи'])]),
+            OrderedDict([('ы', ['и'])]),
         )
 
     def test_0003(self):
         self.assertEqual(
             parse_articles(two_articles.split('\n')),
             OrderedDict([
-                ('ы', ['\tи', '\tӱ']),
-                ('ч', ['\tб', '\tл'])
+                ('ы', ['и', 'ӱ']),
+                ('ч', ['б', 'л'])
             ]),
         )

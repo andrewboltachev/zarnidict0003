@@ -27,6 +27,7 @@ class SimpleRDTestCase(unittest.TestCase):
             [{'name': 'pre', 'data': ['foo', 'bar']}, 'buz']
         )
 
+
 class NestedRDTestCase(unittest.TestCase):
     def test_0001(self):
         self.assertEqual(

@@ -65,7 +65,7 @@ def parse_articles(lines):
                 body.append(line)
             elif kind(line) == LineKind.ENDING:
                 state = LineKind.ENDING
-                result[name] = body
+                result[name] = [x[1:] for x in body]
 
         elif state == LineKind.ENDING:
             if kind(line) == LineKind.NOTHING:
