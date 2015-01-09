@@ -48,6 +48,17 @@ one_article = '''\
 \tи
 \t'''
 
+two_articles = '''\
+ы
+\tи
+\tӱ
+\t
+ч
+\tб
+\tл
+\t'''
+
+# Tested and TDD'ed only partially
 class ParseArticlesTestCase(unittest.TestCase):
     def test_0001(self):
         self.assertEqual(
@@ -55,8 +66,17 @@ class ParseArticlesTestCase(unittest.TestCase):
             OrderedDict([])
         )
 
-    def t1est_0002(self):
+    def test_0002(self):
         self.assertEqual(
             parse_articles(one_article),
-            OrderedDict([('ы', ['и'])]),
+            OrderedDict([('ы', ['\tи'])]),
+        )
+
+    def test_0003(self):
+        self.assertEqual(
+            parse_articles(two_articles),
+            OrderedDict([
+                ('ы', ['\tи', '\tӱ']),
+                ('ч', ['\tб', '\tл'])
+            ]),
         )

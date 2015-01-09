@@ -33,21 +33,49 @@ def parse_articles(text):
 
     kind = LineKind.for_line
 
-    for line in text.split('\n'):
+    for i, line in enumerate(text.split('\n')):
         if state == LineKind.NOTHING:
-            if kind(line) == LineKind.NAME:
+            if kind(line) == LineKind.NOTHING:
+                pass
+            elif kind(line) == LineKind.NAME:
+                state = LineKind.NAME
                 name = line
             elif kind(line) == LineKind.BODY:
-                pass
+                raise ArticlesParsingError("BODY after NOTHING unexpected (line {0})".format(i + 1))
             elif kind(line) == LineKind.ENDING:
-                pass
-            elif kind(line) == LineKind.NOTHING:
-                pass
+                raise ArticlesParsingError("ENDING after NOTHING unexpected (line {0})".format(i + 1))
+
         elif state == LineKind.NAME:
-            pass
+            if kind(line) == LineKind.NOTHING:
+                raise ArticlesParsingError("NOTHING after NAME unexpected (line {0})".format(i + 1))
+            elif kind(line) == LineKind.NAME:
+                raise ArticlesParsingError("NAME after NAME unexpected (line {0})".format(i + 1))
+            elif kind(line) == LineKind.BODY:
+                state = LineKind.BODY
+                body = [line]
+            elif kind(line) == LineKind.ENDING:
+                raise ArticlesParsingError("ENDING after NAME unexpected (line {0})".format(i + 1))
+
         elif state == LineKind.BODY:
-            pass
+            if kind(line) == LineKind.NOTHING:
+                raise ArticlesParsingError("NOTHING after BODY unexpected (line {0})".format(i + 1))
+            elif kind(line) == LineKind.NAME:
+                raise ArticlesParsingError("NAME after BODY unexpected (line {0})".format(i + 1))
+            elif kind(line) == LineKind.BODY:
+                body.append(line)
+            elif kind(line) == LineKind.ENDING:
+                state = LineKind.ENDING
+                result[name] = body
+
         elif state == LineKind.ENDING:
-            pass
+            if kind(line) == LineKind.NOTHING:
+                state = LineKind.NOTHING
+            elif kind(line) == LineKind.NAME:
+                state = LineKind.NAME
+                name = line
+            elif kind(line) == LineKind.BODY:
+                raise ArticlesParsingError("BODY after ENDING unexpected (line {0})".format(i + 1))
+            elif kind(line) == LineKind.ENDING:
+                raise ArticlesParsingError("ENDING after ENDING unexpected (line {0})".format(i + 1))
 
     return result
