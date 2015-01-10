@@ -64,6 +64,10 @@ for article in list(articles.items()):
             item['name']
         except TypeError:
             item = {'name': tr(item), 'data': None}
+        if item == {'name': 'ex', 'data': ['Идиоматические выражения:']}:
+            item = {'name': 'exi', 'data': None}
+        if item['name'] == 'm1' and item['data'][:1] == ['– ']:
+            item = {'name': 'm1dash', 'data': item['data']}
         parsed2.append(item)
     try:
         sm.run(parsed2)

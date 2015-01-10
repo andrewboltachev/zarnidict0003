@@ -5,6 +5,9 @@ class In(State):
     def pre(self, data):
         pass
 
+    def trn(self, data):
+        pass
+
 
 class pre(State):
     def trn(self, data):
@@ -14,6 +17,14 @@ class pre(State):
         pass
 
     def G(self, data):
+        pass
+
+    def end(self, data):
+        pass
+
+
+class end(State):
+    def trn(self, data):
         pass
 
 
@@ -37,6 +48,12 @@ class trn(State):
         pass
 
     def mhr(self, data):
+        pass
+
+    def ex(self, data):
+        pass
+
+    def exi(self, data):
         pass
 
     def Out(self, data):
@@ -66,6 +83,9 @@ class rus(State):
     def ex(self, data):
         pass
 
+    def exi(self, data):
+        pass
+
     def Out(self, data):
         pass
 
@@ -80,6 +100,12 @@ class ref(State):
     def COMMA(self, data):
         pass
 
+    def exi(self, data):
+        pass
+
+    def trn(self, data):
+        pass
+
     def Out(self, data):
         pass
 
@@ -89,8 +115,21 @@ class ref_COMMA(State):
         pass
 
 
+class exi(State):
+    def m1dash(self, data):
+        pass
+
+
+class m1dash(State):
+    def m1dash(self, data):
+        pass
+
+    def Out(self, data):
+        pass
+
+
 class Out(State):
     pass
 
 
-sm = StateMachine([In, pre, G, gor, m1, trn, mhr, u, rus, ex, ref, ref_COMMA, Out])
+sm = StateMachine([In, pre, G, end, gor, m1, trn, mhr, u, rus, ex, ref, ref_COMMA, exi, m1dash, Out])
