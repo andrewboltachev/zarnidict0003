@@ -12,6 +12,7 @@ class StateMachine(object):
         self.states = {state.__name__: state(self) for state in states}
         self.initial = self.states[states[0].__name__]
         self.last_state = self.states[states[len(states) - 1].__name__]
+        import ipdb; ipdb.set_trace() # BREAKPOINT
 
     def run(self, seq):
         self.state = self.initial
@@ -25,4 +26,4 @@ class StateMachine(object):
             getattr(self.state, self.last_state.__class__.__name__)(None)
             self.state = self.last_state
         if self.state != self.last_state:
-            raise StateMachineError('State {0} isn\'t last one'.format(self.state.__class__.__name__))
+            raise StateMachineError('State {0} isn\'t last one. Last state is {1}'.format(self.state.__class__.__name__, self.last_state.__class__.__name__))

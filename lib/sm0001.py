@@ -46,7 +46,7 @@ class rus(State):
         pass
 
 
-def Out(State):
+class Out(State):
     pass
 
 
