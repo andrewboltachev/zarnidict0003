@@ -25,7 +25,7 @@ articles = parse_articles(text)
 # do sth with them...
 
 def line_to_tokens(line):
-    return [x for x in re.split(r'(\[\w+\]|\[\/\w+\]|[\n]|[^\[]+)', line) if x.strip()]
+    return [x for x in re.split(r'([\n]|\[\w+\]|\[\/\w+\]|[^\[]+)', line) if x.strip()]
 
 from lib.sm0001 import sm
 from lib.ex0004 import StateMachineError
@@ -40,6 +40,14 @@ def tr(x):
         return 'G'
     else:
         return x
+
+try:
+    unichr
+except NameError:
+    unichr = chr
+
+one = ord(u'Ⅰ')
+roman_numbers = [unichr(x) for x in range(one, one + 12)]
 
 for article in list(articles.items()):
     body = article[1]
@@ -58,8 +66,20 @@ for article in list(articles.items()):
     print('')
     print('')
     '''
-    parsed2 = []
+    parsed3 = []
     for item in parsed:
+        try:
+            item['name']
+        except TypeError:
+            for x in item.split('\n'):
+                parsed3.append(x)
+        else:
+            parsed3.append(item)
+
+    parsed2 = []
+    for item in parsed3:
+        if item in roman_numbers:
+            item = {'name': 'R', 'data': item}
         try:
             item['name']
         except TypeError:
