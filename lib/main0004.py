@@ -66,7 +66,7 @@ for article in list(articles.items()):
     print('')
     print('')
     '''
-    parsed3 = []
+    parsed3 = [] # FIXME: должно быть разбито по переносам строки заранее при токенизации
     for item in parsed:
         try:
             item['name']
