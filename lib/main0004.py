@@ -69,6 +69,8 @@ for article in list(articles.items()):
 
     parsed2 = []
     for item in parsed3:
+        if item in ['А.', 'Б.']:
+            item = {'name': 'L', 'data': item}
         if item in roman_numbers:
             item = {'name': 'R', 'data': item}
         try:
@@ -79,7 +81,9 @@ for article in list(articles.items()):
                 'Идиоматические выражения:',
                 'Составные глаголы:',
             ]):
-            item = {'name': 'exi', 'data': None}
+            item = {'name': 'exi', 'data': item['data']}
+        if item['name'] == 'i':
+            item = {'name': 'exi', 'data': item['data']}
         if item['name'] == 'm1' and item['data'][:1] == ['– ']:
             item = {'name': 'm1dash', 'data': item['data']}
         parsed2.append(item)
