@@ -410,3 +410,22 @@ sm = StateMachine([
     GG,
     #G_trn, G_mrj, G_u, G_rus, G_ex, G_ref, G_ref_COMMA,
     Out])
+
+
+if __name__ == '__main__':
+    import igraph
+    g = igraph.Graph(directed=True)
+    for s in sm.states:
+        g.add_vertex(s, label=s)
+    for s in sm.states:
+        for t in sm.states:
+            if hasattr(sm.states[s], t):
+                g.add_edge(s, t)
+    l = g.layout("circle")
+    visual_style = {}
+    visual_style["vertex_color"] = "yellow"
+    visual_style["vertex_size"] = "30"
+    visual_style["edge_color"] = "black"
+    visual_style["vertex_shape"] = "circle"
+    visual_style["bbox"] = (1000, 1000)
+    igraph.plot(g, layout=l, margin=100, **visual_style)
