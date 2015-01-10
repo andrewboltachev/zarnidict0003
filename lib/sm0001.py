@@ -36,10 +36,13 @@ class u(State):
 
 
 class rus(State):
+    def mhr(self, data):
+        pass
+
     def trn(self, data):
         pass
 
-    def Out(self):
+    def Out(self, data):
         pass
 
 
