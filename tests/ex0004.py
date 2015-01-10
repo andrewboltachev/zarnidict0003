@@ -18,11 +18,15 @@ class B(State):
     def B(self, data):
         pass
 
-    def eoi(self, data):
+    def Out(self, data):
         pass
 
 
-sm1 = StateMachine([In, A, B])
+class Out(State):
+    pass
+
+
+sm1 = StateMachine([In, A, B, Out])
 
 
 class SimpleSMTestCase(unittest.TestCase):
