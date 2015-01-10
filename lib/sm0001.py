@@ -1,4 +1,4 @@
-from lib.ex0004 import State, StateMachine
+from lib.ex0004 import State, StateMachine, to_state
 
 
 class In(State):
@@ -11,6 +11,19 @@ class pre(State):
         pass
 
     def m1(self, data):
+        pass
+
+    def G(self, data):
+        pass
+
+
+class G(State):
+    def gor(self, data):
+        pass
+
+
+class gor(State):
+    def trn(self, data):
         pass
 
 
@@ -63,16 +76,21 @@ class ex(State):
 
 
 class ref(State):
+    @to_state('ref_COMMA')
     def COMMA(self, data):
+        pass
+
+    def Out(self, data):
         pass
 
 
 class ref_COMMA(State):
-    pass
+    def ref(self, data):
+        pass
 
 
 class Out(State):
     pass
 
 
-sm = StateMachine([In, pre, m1, trn, mhr, u, rus, ex, ref, ref_COMMA, Out])
+sm = StateMachine([In, pre, G, gor, m1, trn, mhr, u, rus, ex, ref, ref_COMMA, Out])

@@ -36,6 +36,8 @@ def tr(x):
         return ''
     elif x == ', ':
         return 'COMMA'
+    elif x == 'Г.: ':
+        return 'G'
     else:
         return x
 
