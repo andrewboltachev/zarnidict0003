@@ -8,8 +8,8 @@ import sys
 
 text = []
 
-with open(sys.argv[1]) as f:
-    for line in f:
+with open(sys.argv[1]) as fi:
+    for line in fi:
         line = line.rstrip('\n')
         if len(line):
             if line[0] == '#':
