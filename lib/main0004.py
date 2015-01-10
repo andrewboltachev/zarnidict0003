@@ -57,5 +57,6 @@ for article in list(articles.items()):
         sm.run(parsed2)
     except StateMachineError as e:
         print(article[0], e)
+        break
     else:
         print(article[0], 'OK')

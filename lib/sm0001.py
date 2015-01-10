@@ -12,6 +12,9 @@ class pre(State):
 
 
 class trn(State):
+    def trn(self, data):
+        pass
+
     def mhr(self, data):
         pass
 
