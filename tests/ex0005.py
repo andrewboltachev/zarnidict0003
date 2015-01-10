@@ -29,17 +29,23 @@ class GetFirstTerminalTestCase(unittest.TestCase):
             {'A': ['a']}
         )
 
-    '''
     def test_two_terminals(self):
-        g = OrderedDict([
-            ('A', ['a', 'b']),
-        ])
+        A = e('A', 'a', 'b')
 
         self.assertEqual(
-            get_first_terminal(g),
-            ['a', 'b']
+            get_first_terminal(A),
+            {'A': ['a', 'b']}
         )
 
+    def test_one_terminal_nested(self):
+        A = e('A', ['a'])
+
+        self.assertEqual(
+            get_first_terminal(A),
+            {'A': {'': ['a']}}
+        )
+
+    '''
     def test_single_level_of_(self):
         g = OrderedDict([
             ('A', 'B'),

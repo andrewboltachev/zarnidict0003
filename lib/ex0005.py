@@ -14,12 +14,17 @@ def Plus(a):
     return [a, Star(a)]
 
 
-def get_first_terminal(g):
-    #return OrderedDict([(k, v[0]) for k, v in g.items()])
-    return {g.name: g.args}
-
-
 class Expr(object):
     def __init__(self, name, *args):
         self.name = name
         self.args = list(args)
+
+
+def get_first_terminal(g):
+    #return OrderedDict([(k, v[0]) for k, v in g.items()])
+    if isinstance(g, Expr):
+        return {g.name: get_first_terminal(g.args)}
+    elif isinstance(g, list):
+        return list(map(get_first_terminal, g))
+    else:
+        return g
