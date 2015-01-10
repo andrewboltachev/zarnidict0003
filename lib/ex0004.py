@@ -1,3 +1,6 @@
+from functools import wraps
+
+
 class StateMachineError(Exception):
     pass
 
@@ -33,3 +36,13 @@ class StateMachine(object):
             self.state = self.last_state
         if self.state != self.last_state:
             raise StateMachineError('State {0} isn\'t last one. Last state is {1}'.format(self.state.__class__.__name__, self.last_state.__class__.__name__))
+
+
+def to_state(state):
+    def f(func, *args, **kwargs):
+        @wraps(func)
+        def g(*args, **kwargs):
+            return func(*args, **kwargs)
+        g.state = state
+        return g
+    return f

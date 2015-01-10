@@ -30,6 +30,15 @@ def line_to_tokens(line):
 from lib.sm0001 import sm
 from lib.ex0004 import StateMachineError
 
+
+def tr(x):
+    if x == '':
+        return ''
+    elif x == ', ':
+        return 'COMMA'
+    else:
+        return x
+
 for article in list(articles.items()):
     body = article[1]
     line = '\n'.join(body)
@@ -52,7 +61,7 @@ for article in list(articles.items()):
         try:
             item['name']
         except TypeError:
-            item = {'name': item, 'data': None}
+            item = {'name': tr(item), 'data': None}
         parsed2.append(item)
     try:
         sm.run(parsed2)

@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0004 import State, StateMachine
+from ..lib.ex0004 import State, StateMachine, to_state
 
 class In(State):
     def A(self, data):
@@ -30,13 +30,15 @@ sm1 = StateMachine([In, A, B, Out])
 
 
 class In1(State):
-    def A1(self, data):
+    @to_state('A1')
+    def A(self, data):
         pass
 
 
 class A1(State):
-    def A1(self, data):
+    def A(self, data):
         pass
+    A.state = 'A1'
 
     def B(self, data):
         self.state_machine.result = data
@@ -69,8 +71,8 @@ class SimpleSMTestCase(unittest.TestCase):
 
     def test_0002(self):
         sm2.run([
-            {'name': 'A1', 'data': 'data of A1'},
-            {'name': 'A1', 'data': 'data of A2'},
+            {'name': 'A', 'data': 'data of A1'},
+            {'name': 'A', 'data': 'data of A2'},
             {'name': 'B', 'data': 'data of B'},
         ])
         self.assertEqual(

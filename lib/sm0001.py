@@ -50,16 +50,21 @@ class rus(State):
     def trn(self, data):
         pass
 
+    def ex(self, data):
+        pass
+
     def Out(self, data):
         pass
 
 
 class ex(State):
-    pass
+    def ref(self, data):
+        pass
 
 
 class ref(State):
-    pass
+    def COMMA(self, data):
+        pass
 
 
 class ref_COMMA(State):
