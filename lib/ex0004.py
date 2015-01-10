@@ -46,3 +46,14 @@ def to_state(state):
         g.state = state
         return g
     return f
+
+
+def state_pfx(pfx):
+    def f(func, *args, **kwargs):
+        @wraps(func)
+        def g(*args, **kwargs):
+            return func(*args, **kwargs)
+        state = getattr(func, 'state', func.__name__)
+        g.state = pfx + state
+        return g
+    return f
