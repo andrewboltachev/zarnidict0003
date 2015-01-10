@@ -54,6 +54,18 @@ class rus(State):
         pass
 
 
+class ex(State):
+    pass
+
+
+class ref(State):
+    pass
+
+
+class ref_COMMA(State):
+    pass
+
+
 class Out(State):
     pass
 
