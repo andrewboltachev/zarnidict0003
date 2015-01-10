@@ -10,6 +10,14 @@ class pre(State):
     def trn(self, data):
         pass
 
+    def m1(self, data):
+        pass
+
+
+class m1(State):
+    def trn(self, data):
+        pass
+
 
 class trn(State):
     def trn(self, data):
@@ -50,4 +58,4 @@ class Out(State):
     pass
 
 
-sm = StateMachine([In, pre, trn, mhr, u, rus, Out])
+sm = StateMachine([In, pre, m1, trn, mhr, u, rus, ex, ref, ref_COMMA, Out])

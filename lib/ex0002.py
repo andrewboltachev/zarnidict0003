@@ -11,11 +11,11 @@ def ensure_iterator(f):
     return g
 
 def is_opening_tag(x):
-    return re.match(r'^\[[a-z]+\]$', x) is not None
+    return re.match(r'^\[[a-z][a-z0-9]*\]$', x) is not None
 
 
 def is_closing_tag(x):
-    return re.match(r'^\[\/[a-z]+\]$', x) is not None
+    return re.match(r'^\[\/[a-z][a-z0-9]*\]$', x) is not None
 
 
 def get_tag(x):

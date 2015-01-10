@@ -17,8 +17,15 @@ class StateMachine(object):
         self.state = self.initial
         for item in seq:
             if hasattr(self.state, item['name']):
-                getattr(self.state, item['name'])(item['data'])
-                self.state = self.states[item['name']]
+                func = getattr(self.state, item['name'])
+                func(item['data'])
+
+                if hasattr(func, 'state'):
+                    new_state_name = getattr(func, 'state')
+                else:
+                    new_state_name = item['name']
+
+                self.state = self.states[new_state_name]
             else:
                 raise StateMachineError('No way from {0} to {1}'.format(self.state.__class__.__name__, item['name']))
         if hasattr(self.state, self.last_state.__class__.__name__):
