@@ -38,6 +38,8 @@ def tr(x):
         return 'COMMA'
     elif x == 'Г.: ':
         return 'G'
+    elif x == 'Г.':
+        return 'GG'
     else:
         return x
 
@@ -54,25 +56,14 @@ for article in list(articles.items()):
     line = '\n'.join(body)
     tokens = line_to_tokens(line)
     parsed = f(tokens)
-    '''
-    print(line)
-    print(tokens)
-    print('')
-    print('')
-    print('')
-    #print(json.dumps(parsed, ensure_ascii=False))
-    pprint.pprint(parsed)
-    print('')
-    print('')
-    print('')
-    '''
     parsed3 = [] # FIXME: должно быть разбито по переносам строки заранее при токенизации
     for item in parsed:
         try:
             item['name']
         except TypeError:
             for x in item.split('\n'):
-                parsed3.append(x)
+                if x.strip():
+                    parsed3.append(x)
         else:
             parsed3.append(item)
 
@@ -84,7 +75,10 @@ for article in list(articles.items()):
             item['name']
         except TypeError:
             item = {'name': tr(item), 'data': None}
-        if item == {'name': 'ex', 'data': ['Идиоматические выражения:']}:
+        if item['name'] == 'ex' and item['data'] in map(lambda v: [v], [
+                'Идиоматические выражения:',
+                'Составные глаголы:',
+            ]):
             item = {'name': 'exi', 'data': None}
         if item['name'] == 'm1' and item['data'][:1] == ['– ']:
             item = {'name': 'm1dash', 'data': item['data']}
