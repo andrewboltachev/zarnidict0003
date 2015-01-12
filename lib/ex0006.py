@@ -79,12 +79,13 @@ class Automaton(object, metaclass=abc.ABCMeta):
 
 class Char(Automaton):
     def process(self, data):
+        c = copy.deepcopy(data)
         try:
-            next_char = next(data)
+            next_char = next(c)
         except StopIteration:
             raise AutomatonException("Wasn't able to consume all line. Tried do match char {0}".format(self.args[0]))
         if next_char.name == self.args[0]:
-            return data, next_char
+            return c, next_char
         raise AutomatonException("Char incorrect {0}. Tried to match char {1}".format(next_char.name, self.args[0]))
 
 

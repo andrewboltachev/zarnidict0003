@@ -247,3 +247,5 @@ class MyTestCase(unittest.TestCase):
             o,
             y
         )
+
+# TODO: "eating one char" by Char

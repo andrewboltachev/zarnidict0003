@@ -50,7 +50,7 @@ except NameError:
 
 
 from lib.ex0006 import (
-    Char, Seq, Or, Star,
+    Char, Seq, Or, Star, MayBe,
     InputChar,
     AutomatonException
 )
@@ -76,9 +76,12 @@ T = Seq(
 )
 
 sm = Seq(
-    Char('pre', 'ударение'),
     Seq(
-        T,
+        Char('pre'),
+        MayBe(Char('m1'), name='пояснение'),
+    ),
+    Seq(
+        #T,
         Star(T, name='...'),
         name='перевод'
     ),
@@ -149,16 +152,11 @@ for article in list(articles.items()):
     try:
         r = sm.run(iter(parsed4))
     except AutomatonException as e:
-        perr()
+        perr(e)
         break
     else:
-        if not r:
-            perr()
-            break
-        else:
-            print(article[0], 'OK')
-            sd(r.to_json_like())
-            break
-            print('')
-            print('')
-            print('')
+        print(article[0], 'OK')
+        sd(r.to_json_like())
+        print('')
+        print('')
+        print('')
