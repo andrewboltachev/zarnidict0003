@@ -29,7 +29,7 @@ class Node(object):
 
 class SeqNode(Node):
     def to_tree(self):
-        return [x.to_tree() for x in self.content]
+        return [x.to_tree() if x is not None else None for x in self.content]
 
 
 class Automaton(object, metaclass=abc.ABCMeta):
@@ -62,7 +62,10 @@ class InputChar(object):
         self.payload = payload
 
     def __eq__(self, other):
-        return self.name == other.name
+        if isinstance(other, InputChar):
+            return self.name == other.name
+        else:
+            return False
 
     def __repr__(self):
         return '<InputChar {0} ({1})>'.format(self.name, repr(self.payload))
@@ -74,7 +77,8 @@ class Seq(Automaton):
         seq = []
         for arg in self.args:
             seq.append(arg.process(data))
-        if len(seq):
+        seq = list(filter(lambda x: x is not None, seq))
+        if len(seq) == len(self.args):
             return self.node(seq)
         return None
 

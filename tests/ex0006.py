@@ -74,5 +74,17 @@ class MyTestCase(unittest.TestCase):
             o,
             y
         )
-    '''
-    '''
+
+    def test_Seq_neg(self):
+        g = Seq(Char('a'), Char('b'))
+        x = iter([
+            InputChar('a'),
+            InputChar('a'),
+        ])
+        o = g.process(x)
+        print(o)
+        y = SeqNode([Node(InputChar('a')), Node(InputChar('b'))])
+        self.assertEqual(
+            o,
+            None
+        )
