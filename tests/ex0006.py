@@ -21,7 +21,7 @@ class MyTestCase(unittest.TestCase):
         ])
         y = Node(Node(['a']))
         self.assertEqual(
-            g.process(x),
+            g.run(x),
             y
         )
 
@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
         x = iter([
             InputChar('a'),
         ])
-        o = g.process(x)
+        o = g.run(x)
         y = InputChar('a')
         self.assertEqual(
             o,
@@ -42,7 +42,7 @@ class MyTestCase(unittest.TestCase):
         x = iter([
             InputChar('a'),
         ])
-        o = g.process(x)
+        o = g.run(x)
         self.assertEqual(
             o,
             None
@@ -53,7 +53,7 @@ class MyTestCase(unittest.TestCase):
         x = iter([
             InputChar('a'),
         ])
-        o = g.process(x)
+        o = g.run(x)
         print(o)
         y = SeqNode([InputChar('a')])
         self.assertEqual(
@@ -67,7 +67,7 @@ class MyTestCase(unittest.TestCase):
             InputChar('a'),
             InputChar('b'),
         ])
-        o = g.process(x)
+        o = g.run(x)
         print(o)
         y = SeqNode([InputChar('a'), InputChar('b')])
         self.assertEqual(
@@ -81,7 +81,7 @@ class MyTestCase(unittest.TestCase):
             InputChar('a'),
             InputChar('a'),
         ])
-        o = g.process(x)
+        o = g.run(x)
         print(o)
         y = SeqNode([InputChar('a'), InputChar('b')])
         self.assertEqual(
@@ -95,7 +95,7 @@ class MyTestCase(unittest.TestCase):
             InputChar('a', 'payload a'),
             InputChar('b', 'this is payload b'),
         ])
-        o = g.process(x).to_json_like()
+        o = g.run(x).to_json_like()
         print(o)
         y = {
             'name': 'name 1',

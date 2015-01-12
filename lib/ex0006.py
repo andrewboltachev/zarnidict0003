@@ -52,6 +52,9 @@ class Automaton(object, metaclass=abc.ABCMeta):
         self.args = args
         self.name = name
 
+    def run(self, data):
+        return self.process(data)[1]
+
     @abc.abstractmethod
     def process(self, data):
         pass
@@ -67,8 +70,8 @@ class Char(Automaton):
         except StopIteration:
             return None
         if next_char.name == self.args[0]:
-            return next_char
-        return None
+            return data, next_char
+        return data, None
 
 
 class InputChar(object):
@@ -97,21 +100,22 @@ class Seq(Automaton):
     def process(self, data):
         seq = []
         for arg in self.args:
-            seq.append(arg.process(data))
+            data, r = arg.process(data)
+            seq.append(r)
         seq = list(filter(lambda x: x is not None, seq))
         if len(seq) == len(self.args):
-            return self.node(seq)
-        return None
+            return data, self.node(seq)
+        return data, None
 
 
 class Or(Automaton):
     def process(self, data):
         for arg in self.args:
             c = copy.deepcopy(data)
-            r = arg.process(c)
+            c, r = arg.process(c)
             if r:
-                return r
-        return None
+                return c, r
+        return data, None
 
 
 class Star(Automaton):
