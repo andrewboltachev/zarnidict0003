@@ -2,6 +2,10 @@ import copy
 import abc
 
 
+class AutomatonException(Exception):
+    pass
+
+
 class Node(object):
     def __init__(self, content, name=None, klass=None):
         self.content = content
@@ -53,7 +57,17 @@ class Automaton(object, metaclass=abc.ABCMeta):
         self.name = name
 
     def run(self, data):
-        return self.process(data)[1]
+        data, result = self.process(data)
+        tail = []
+        while True:
+            try:
+                tail.append(next(data))
+            except StopIteration:
+                break
+        if len(tail):
+            raise AutomatonException("Not all input consumed during processing. Tail is: {0}".format(repr(tail)))
+        else:
+            return result
 
     @abc.abstractmethod
     def process(self, data):

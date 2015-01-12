@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, InputChar
+from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, InputChar, AutomatonException
 
 
 class MyTestCase(unittest.TestCase):
@@ -186,3 +186,17 @@ class MyTestCase(unittest.TestCase):
             o,
             y
         )
+
+    def test_exception(self):
+        g = Seq(
+            Char('a'),
+            Char('b')
+        )
+        x = iter([
+            InputChar('a'),
+            InputChar('b'),
+            InputChar('c'),
+            InputChar('d'),
+        ])
+        with self.assertRaises(AutomatonException):
+            o = g.run(x)
