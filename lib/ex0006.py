@@ -82,10 +82,10 @@ class Char(Automaton):
         try:
             next_char = next(data)
         except StopIteration:
-            return data, None
+            raise AutomatonException("Wasn't able to consume all line. Tried do match char {0}".format(self.args[0]))
         if next_char.name == self.args[0]:
             return data, next_char
-        return data, None
+        raise AutomatonException("Char incorrect {0}. Tried to match char {1}".format(next_char.name, self.args[0]))
 
 
 class InputChar(object):
@@ -119,20 +119,20 @@ class Seq(Automaton):
         for arg in self.args:
             data, r = arg.process(data)
             seq.append(r)
-        seq = list(filter(lambda x: x is not None, seq))
-        if len(seq) == len(self.args):
-            return data, self.node(seq)
-        return data, None
+        return data, self.node(seq)
 
 
 class Or(Automaton):
     def process(self, data):
         for arg in self.args:
             c = copy.deepcopy(data)
-            c, r = arg.process(c)
-            if r:
+            try:
+                c, r = arg.process(c)
+            except AutomatonException:
+                pass
+            else:
                 return c, r
-        return data, None
+        raise AutomatonException("Wasn't able to resolve Or rule (name={0})".format(self.name))
 
 
 class Star(Automaton):
@@ -145,9 +145,8 @@ class Star(Automaton):
                 c1, r = self.args[0].process(c)
             except StopIteration:
                 return c, self.node([])
+            except AutomatonException:
+                return c, self.node(seq)
             else:
-                if r:
-                    seq.append(r)
-                    c = c1
-                else:
-                    return c, self.node(seq)
+                seq.append(r)
+                c = c1

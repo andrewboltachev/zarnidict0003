@@ -42,11 +42,8 @@ class MyTestCase(unittest.TestCase):
         x = iter([
             InputChar('a'),
         ])
-        o = g.run(x)
-        self.assertEqual(
-            o,
-            None
-        )
+        with self.assertRaises(AutomatonException):
+            o = g.run(x)
 
     def test_Seq_single(self):
         g = Seq(Char('a'))
@@ -81,13 +78,8 @@ class MyTestCase(unittest.TestCase):
             InputChar('a'),
             InputChar('a'),
         ])
-        o = g.run(x)
-        print(o)
-        y = SeqNode([InputChar('a'), InputChar('b')])
-        self.assertEqual(
-            o,
-            None
-        )
+        with self.assertRaises(AutomatonException):
+            o = g.run(x)
 
     def test_Seq_to_json_like(self):
         g = Seq(Char('a'), Char('b'), name='name 1')
