@@ -31,10 +31,6 @@ articles = parse_articles(text)
 def line_to_tokens(line):
     return [x for x in re.split(r'([\n]|\[\w+\]|\[\/\w+\]|[^\[]+)', line) if x.strip()]
 
-from lib.sm0001 import sm
-from lib.ex0004 import StateMachineError
-
-
 def tr(x):
     if x == '':
         return ''
@@ -51,6 +47,38 @@ try:
     unichr
 except NameError:
     unichr = chr
+
+
+from lib.ex0006 import (
+    Char, Seq, Or, Star,
+    InputChar,
+    AutomatonException
+)
+
+EX = Or(
+    Seq(
+        Char('mhr'),
+        Char('rus'),
+    ),
+    Seq(
+        Char('mhr'),
+        Char('u'),
+        Char('rus'),
+    ),
+)
+T = Seq(
+    Char('trn'),
+    Star(EX)
+)
+
+sm = Seq(
+    Char('pre'),
+    Seq(
+        T,
+        Star(T),
+    )
+)
+
 
 one = ord(u'Ⅰ')
 roman_numbers = [unichr(x) for x in range(one, one + 12)]
@@ -91,12 +119,24 @@ for article in list(articles.items()):
         if item['name'] == 'm1' and item['data'][:1] == ['– ']:
             item = {'name': 'm1dash', 'data': item['data']}
         parsed2.append(item)
+
+    parsed4 = [InputChar(name=x['name'], payload=x['data']) for x in parsed2]
     try:
-        sm.run(parsed2)
-    except StateMachineError as e:
+        r = sm.run(iter(parsed4))
+    except AutomatonException as e:
         print(article[0], e)
         print('')
         pprint.pprint(parsed2)
         break
     else:
-        print(article[0], 'OK')
+        if not r:
+            print(article[0], 'FAIL')
+            print('')
+            pprint.pprint(parsed2)
+            break
+        else:
+            print(article[0], 'OK')
+            print(r.to_json_like())
+            print('')
+            print('')
+            print('')
