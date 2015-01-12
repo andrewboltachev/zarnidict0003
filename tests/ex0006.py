@@ -227,3 +227,23 @@ class MyTestCase(unittest.TestCase):
         ])
         with self.assertRaises(AutomatonException):
             o = g.run(x)
+
+    def test_MayBe_non_case(self):
+        g = Seq(
+            Char('a'),
+            MayBe(Char('b'))
+        )
+        x = iter([
+            InputChar('a'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = SeqNode([
+            InputChar('a'),
+            SeqNode([
+            ])
+        ])
+        self.assertEqual(
+            o,
+            y
+        )
