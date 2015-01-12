@@ -141,3 +141,20 @@ class MyTestCase(unittest.TestCase):
             o,
             y
         )
+
+    def test_0001(self):
+        g = Or(
+            Seq(
+                Char('a'),
+                name='branch a'
+            ),
+            Char('b')
+        )
+        x = iter([
+            InputChar('a'),
+        ])
+        y = SeqNode([InputChar('a')])
+        self.assertEqual(
+            g.run(x),
+            y
+        )
