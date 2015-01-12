@@ -116,3 +116,28 @@ class MyTestCase(unittest.TestCase):
             y
         )
 
+    def test_Or(self):
+        g = Or(Char('a'), Char('b'), name='Or 1')
+        x = iter([
+            InputChar('a'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = InputChar('a')
+        self.assertEqual(
+            o,
+            y
+        )
+
+    def test_Or2(self):
+        g = Or(Char('a'), Char('b'), name='Or 1')
+        x = iter([
+            InputChar('b'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = InputChar('b')
+        self.assertEqual(
+            o,
+            y
+        )
