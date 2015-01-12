@@ -69,6 +69,19 @@ EX = Or(
     ),
     name='пример',
 )
+
+REF = Seq(
+    Char('ex'),
+    Char('ref'),
+    Star(
+        Seq(
+            Char('COMMA'),
+            Char('ref'),
+        )
+    ),
+    name='ссылки',
+)
+
 T = Seq(
     Char('trn'),
     Star(EX, name='примеры'),
@@ -85,6 +98,7 @@ sm = Seq(
         Star(T, name='...'),
         name='перевод'
     ),
+    MayBe(REF),
     name='статья',
 )
 
