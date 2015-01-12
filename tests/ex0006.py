@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, InputChar, AutomatonException
+from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException
 
 
 class MyTestCase(unittest.TestCase):
@@ -189,6 +189,41 @@ class MyTestCase(unittest.TestCase):
             InputChar('b'),
             InputChar('c'),
             InputChar('d'),
+        ])
+        with self.assertRaises(AutomatonException):
+            o = g.run(x)
+
+    def test_MayBe(self):
+        g = Seq(
+            Char('a'),
+            MayBe(Char('b'))
+        )
+        x = iter([
+            InputChar('a'),
+            InputChar('b'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = SeqNode([
+            InputChar('a'),
+            SeqNode([
+                InputChar('b'),
+            ])
+        ])
+        self.assertEqual(
+            o,
+            y
+        )
+
+    def test_MayBe_doesn_t_consume_all(self):
+        g = Seq(
+            Char('a'),
+            MayBe(Char('b'))
+        )
+        x = iter([
+            InputChar('a'),
+            InputChar('b'),
+            InputChar('b'),
         ])
         with self.assertRaises(AutomatonException):
             o = g.run(x)

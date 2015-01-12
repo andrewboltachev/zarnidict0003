@@ -150,3 +150,17 @@ class Star(Automaton):
             else:
                 seq.append(r)
                 c = c1
+
+
+class MayBe(Automaton):
+    node_class = SeqNode
+    def process(self, data):
+        c = copy.deepcopy(data)
+        try:
+            c1, r = self.args[0].process(c)
+        except StopIteration:
+            return c, self.node([])
+        except AutomatonException:
+            return c, self.node([])
+        else:
+            return c1, self.node([r])
