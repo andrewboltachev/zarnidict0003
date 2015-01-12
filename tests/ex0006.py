@@ -31,7 +31,7 @@ class MyTestCase(unittest.TestCase):
             InputChar('a'),
         ])
         o = g.process(x)
-        y = Node(InputChar('a'))
+        y = InputChar('a')
         self.assertEqual(
             o,
             y
@@ -55,7 +55,7 @@ class MyTestCase(unittest.TestCase):
         ])
         o = g.process(x)
         print(o)
-        y = SeqNode([Node(InputChar('a'))])
+        y = SeqNode([InputChar('a')])
         self.assertEqual(
             o,
             y
@@ -69,7 +69,7 @@ class MyTestCase(unittest.TestCase):
         ])
         o = g.process(x)
         print(o)
-        y = SeqNode([Node(InputChar('a')), Node(InputChar('b'))])
+        y = SeqNode([InputChar('a'), InputChar('b')])
         self.assertEqual(
             o,
             y
@@ -83,8 +83,36 @@ class MyTestCase(unittest.TestCase):
         ])
         o = g.process(x)
         print(o)
-        y = SeqNode([Node(InputChar('a')), Node(InputChar('b'))])
+        y = SeqNode([InputChar('a'), InputChar('b')])
         self.assertEqual(
             o,
             None
         )
+
+    def test_Seq_to_json_like(self):
+        g = Seq(Char('a'), Char('b'), name='name 1')
+        x = iter([
+            InputChar('a', 'payload a'),
+            InputChar('b', 'this is payload b'),
+        ])
+        o = g.process(x).to_json_like()
+        print(o)
+        y = {
+            'name': 'name 1',
+            'klass': 'Seq',
+            'content': [
+                {
+                    'name': 'a',
+                    'payload': 'payload a',
+                },
+                {
+                    'name': 'b',
+                    'payload': 'this is payload b',
+                },
+            ]
+        }
+        self.assertEqual(
+            o,
+            y
+        )
+

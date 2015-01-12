@@ -14,6 +14,13 @@ class Node(object):
         else:
             return self.content
 
+    def to_json_like(self):
+        return {
+            'name': self.name,
+            'klass': self.klass,
+            'content': self.content.to_json_like()
+        }
+
     def __repr__(self):
         return '<{2} {0} class={1}>'.format(repr(self.to_tree()), self.klass, self.__class__.__name__)
 
@@ -29,20 +36,28 @@ class Node(object):
 
 class SeqNode(Node):
     def to_tree(self):
-        return [x.to_tree() if x is not None else None for x in self.content]
+        return [x.to_json_like() if x is not None else None for x in self.content]
+
+    def to_json_like(self):
+        return {
+            'name': self.name,
+            'klass': self.klass,
+            'content': [x.to_json_like() if x is not None else None for x in self.content]
+        }
 
 
 class Automaton(object, metaclass=abc.ABCMeta):
     node_class = Node
     def __init__(self, *args, name=None):
         self.args = args
+        self.name = name
 
     @abc.abstractmethod
     def process(self, data):
         pass
 
-    def node(self, data, name=None):
-        return self.node_class(data, name=name, klass=self.__class__.__name__)
+    def node(self, data):
+        return self.node_class(data, name=self.name, klass=self.__class__.__name__)
 
 
 class Char(Automaton):
@@ -52,7 +67,7 @@ class Char(Automaton):
         except StopIteration:
             return None
         if next_char.name == self.args[0]:
-            return self.node(next_char)
+            return next_char
         return None
 
 
@@ -69,6 +84,12 @@ class InputChar(object):
 
     def __repr__(self):
         return '<InputChar {0} ({1})>'.format(self.name, repr(self.payload))
+
+    def to_json_like(self):
+        return {
+            'name': self.name,
+            'payload': self.payload
+        }
 
 
 class Seq(Automaton):
