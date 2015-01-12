@@ -142,7 +142,7 @@ class MyTestCase(unittest.TestCase):
             y
         )
 
-    def test_0001(self):
+    def test_Seq_Or(self):
         g = Or(
             Seq(
                 Char('a'),
@@ -156,5 +156,33 @@ class MyTestCase(unittest.TestCase):
         y = SeqNode([InputChar('a')])
         self.assertEqual(
             g.run(x),
+            y
+        )
+
+    def test_Star(self):
+        g = Seq(
+            Char('a'),
+            Star(
+                Char('b')
+            ),
+        )
+        x = iter([
+            InputChar('a'),
+            InputChar('b'),
+            InputChar('b'),
+            InputChar('b'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = SeqNode([
+            InputChar('a'),
+            SeqNode([
+                InputChar('b'),
+                InputChar('b'),
+                InputChar('b'),
+            ])
+        ])
+        self.assertEqual(
+            o,
             y
         )

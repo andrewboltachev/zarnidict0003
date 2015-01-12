@@ -36,7 +36,7 @@ class Node(object):
 
 class SeqNode(Node):
     def to_tree(self):
-        return [x.to_json_like() if x is not None else None for x in self.content]
+        return [x.to_tree() if x is not None else None for x in self.content]
 
     def to_json_like(self):
         return {
@@ -68,7 +68,7 @@ class Char(Automaton):
         try:
             next_char = next(data)
         except StopIteration:
-            return None
+            return data, None
         if next_char.name == self.args[0]:
             return data, next_char
         return data, None
@@ -87,6 +87,9 @@ class InputChar(object):
 
     def __repr__(self):
         return '<InputChar {0} ({1})>'.format(self.name, repr(self.payload))
+
+    def to_tree(self):
+        return self
 
     def to_json_like(self):
         return {
@@ -119,4 +122,18 @@ class Or(Automaton):
 
 
 class Star(Automaton):
-    pass
+    node_class = SeqNode
+    def process(self, data):
+        seq = []
+        c = copy.deepcopy(data)
+        while True:
+            try:
+                c1, r = self.args[0].process(c)
+            except StopIteration:
+                return c, self.node([])
+            else:
+                if r:
+                    seq.append(r)
+                    c = c1
+                else:
+                    return c, self.node(seq)
