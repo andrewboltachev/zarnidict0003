@@ -59,24 +59,30 @@ EX = Or(
     Seq(
         Char('mhr'),
         Char('rus'),
+        name='пример без автора',
     ),
     Seq(
         Char('mhr'),
         Char('u'),
         Char('rus'),
+        name='пример с автором',
     ),
+    name='пример',
 )
 T = Seq(
     Char('trn'),
-    Star(EX)
+    Star(EX, name='примеры'),
+    name='перевод значения'
 )
 
 sm = Seq(
-    Char('pre'),
+    Char('pre', 'ударение'),
     Seq(
         T,
-        Star(T),
-    )
+        Star(T, name='...'),
+        name='перевод'
+    ),
+    name='статья',
 )
 
 
@@ -121,22 +127,38 @@ for article in list(articles.items()):
         parsed2.append(item)
 
     parsed4 = [InputChar(name=x['name'], payload=x['data']) for x in parsed2]
+    def sd(x, level=0):
+        def p(x, l=level):
+            print(('  ' * l) + str(x))
+        if 'name' in x:
+            p(x['name'])
+            if 'content' in x:
+                if isinstance(x['content'], list):
+                    for y in x['content']:
+                        sd(y, level + 1)
+                else:
+                    sd(x['content'], level + 1)
+        else:
+            p(x)
+    def jd(x):
+        print(json.dumps(x, indent=4, ensure_ascii=False))
+    def perr(e='FAIL'):
+        print(article[0], e)
+        print('')
+        jd(parsed2)
     try:
         r = sm.run(iter(parsed4))
     except AutomatonException as e:
-        print(article[0], e)
-        print('')
-        pprint.pprint(parsed2)
+        perr()
         break
     else:
         if not r:
-            print(article[0], 'FAIL')
-            print('')
-            pprint.pprint(parsed2)
+            perr()
             break
         else:
             print(article[0], 'OK')
-            print(r.to_json_like())
+            sd(r.to_json_like())
+            break
             print('')
             print('')
             print('')
