@@ -145,10 +145,16 @@ for article in list(articles.items()):
 
     parsed4 = [InputChar(name=x['name'], payload=x['data']) for x in parsed2]
     def sd(x, level=0):
-        def p(x, l=level):
-            print(('  ' * l) + str(x))
+        def p(x, l=level, pl=''):
+            if pl:
+                pl = '\t' + pl
+            print(('  ' * l) + str(x) + pl)
         if 'name' in x:
-            p(x['name'])
+            pl = ''
+            if 'payload' in x:
+                pl = str(x['payload']).replace('\n', ' ')
+
+            p(x['name'], l=level, pl=pl)
             if 'content' in x:
                 if isinstance(x['content'], list):
                     for y in x['content']:
@@ -170,6 +176,7 @@ for article in list(articles.items()):
         break
     else:
         print(article[0], 'OK')
+        jd(r.to_json_like())
         sd(r.to_json_like())
         print('')
         print('')
