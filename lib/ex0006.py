@@ -142,7 +142,14 @@ class Or(Automaton):
                 pass
             else:
                 return c, r
-        raise AutomatonException("Wasn't able to resolve Or rule (name={0})".format(self.name))
+        c = copy.deepcopy(data)
+        try:
+            next_char = next(c)
+        except StopIteration:
+            next_char_desc = "Reached end of input"
+        else:
+            next_char_desc = "Next char is {0}".format(next_char)
+        raise AutomatonException("Wasn't able to resolve Or rule (name={0}). ".format(self.name) + next_char_desc)
 
 
 class Star(Automaton):

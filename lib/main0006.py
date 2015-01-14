@@ -78,10 +78,12 @@ EX = Or(
 REF = Seq(
     Char('ex'),
     Char('ref'),
+    MayBe(Char('u')),
     Star(
         Seq(
             Char('COMMA'),
             Char('ref'),
+            MayBe(Char('u')),
         )
     ),
     name='ссылки',
@@ -100,9 +102,24 @@ B_a = Seq(
     name='перевод'
 )
 
+
+PRE = Seq(
+    MayBe(Char('pre')),
+    MayBe(Char('end')),
+    MayBe(Char('m1'), name='пояснение'),
+)
+
+PRE_B_a = Seq(
+    PRE,
+    B_a
+)
+
 R_el = Seq(
     Char('R'),
-    B_a
+    Or(
+        PRE_B_a,
+        B_a
+    )
 )
 
 R_a = Seq(
@@ -110,17 +127,21 @@ R_a = Seq(
     Star(R_el),
 )
 
-sm = Seq(
+PRE_Only = Seq(
+    PRE
+)
+
+sm = Or(
+    PRE_Only,
     Seq(
-        MayBe(Char('pre')),
-        MayBe(Char('end')),
-        MayBe(Char('m1'), name='пояснение'),
-    ),
-    Or(
-        R_a,
-        B_a,
-    ),
-    name='статья',
+        PRE,
+        Or(
+            #L_a,
+            R_a,
+            B_a,
+        ),
+        name='статья',
+    )
 )
 
 
@@ -189,7 +210,7 @@ for article in list(articles.items()):
     def perr(e='FAIL'):
         print(article[0], e)
         print('')
-        jd(parsed2)
+        #jd(parsed2)
     try:
         r = sm.run(iter(parsed4))
     except AutomatonException as e:
@@ -197,7 +218,7 @@ for article in list(articles.items()):
         break
     else:
         print(article[0], 'OK')
-        jd(r.to_json_like())
+        #jd(r.to_json_like())
         sd(r.to_json_like())
         print('')
         print('')

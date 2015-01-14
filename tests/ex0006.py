@@ -262,3 +262,54 @@ class MyTestCase(unittest.TestCase):
             )
 
 # TODO: "eating one char" by Char
+# TODO: length test
+'''
+[
+    [
+        InputChar('a'),
+        InputChar('b'),
+    ],
+    [
+        InputChar('a'),
+    ]
+]
+'''
+
+class LengthTestCase(unittest.TestCase):
+    def setUp(self):
+        self.g = Or(
+            Seq(Char('a'), Char('b')),
+            Seq(Char('a'))
+        )
+
+    def test_0001(self):
+        g = self.g
+        x = iter([
+            InputChar('a'),
+            InputChar('b'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = SeqNode([
+            InputChar('a'),
+            InputChar('b'),
+        ])
+        self.assertEqual(
+            o,
+            y
+        )
+
+    def test_0002(self):
+        g = self.g
+        x = iter([
+            InputChar('a'),
+        ])
+        o = g.run(x)
+        print(o)
+        y = SeqNode([
+            InputChar('a'),
+        ])
+        self.assertEqual(
+            o,
+            y
+        )
