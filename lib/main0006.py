@@ -5,12 +5,17 @@ import fileinput
 import pprint
 import re
 import sys
+import os
 
 text = []
 
 argv = sys.argv[1:]
 
-FILENAME = argv[0] if len(argv) else '/home/andrey/docs/zarnidict0001/dicts/chm-rus/marirus.dsl'
+FILENAME =  argv[0] if len(argv) else os.environ.get('DICT_FILENAME', None)
+
+if FILENAME is None:
+    sys.stderr.write('Укажите имя файла в качестве аргумента либо установите переменную среды DICT_FILENAME\n')
+    sys.exit(1)
 
 with open(FILENAME) as fi:
     for line in fi:
@@ -63,7 +68,7 @@ EX = Or(
     ),
     Seq(
         Char('mhr'),
-        Char('u'),
+        Char('aut'),
         Char('rus'),
         name='пример с автором',
     ),
@@ -85,20 +90,36 @@ REF = Seq(
 T = Seq(
     Char('trn'),
     Star(EX, name='примеры'),
+    MayBe(REF),
     name='перевод значения'
+)
+
+B_a = Seq(
+    T,
+    Star(T, name='...'),
+    name='перевод'
+)
+
+R_el = Seq(
+    Char('R'),
+    B_a
+)
+
+R_a = Seq(
+    R_el,
+    Star(R_el),
 )
 
 sm = Seq(
     Seq(
-        Char('pre'),
+        MayBe(Char('pre')),
+        MayBe(Char('end')),
         MayBe(Char('m1'), name='пояснение'),
     ),
-    Seq(
-        #T,
-        Star(T, name='...'),
-        name='перевод'
+    Or(
+        R_a,
+        B_a,
     ),
-    MayBe(REF),
     name='статья',
 )
 

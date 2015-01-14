@@ -52,7 +52,13 @@ class SeqNode(Node):
 
 class Automaton(object, metaclass=abc.ABCMeta):
     node_class = Node
+    def check_args(self, args):
+        for arg in args:
+            if not issubclass(arg.__class__, Automaton):
+                raise AutomatonException('{0} isn\'t subclass of Automaton'.format(repr(arg)))
+
     def __init__(self, *args, name=None):
+        self.check_args(args)
         self.args = args
         self.name = name
 
@@ -78,6 +84,9 @@ class Automaton(object, metaclass=abc.ABCMeta):
 
 
 class Char(Automaton):
+    def check_args(self, args):
+        pass
+
     def process(self, data):
         c = copy.deepcopy(data)
         try:

@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException
+from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException, Automaton
 
 
 class MyTestCase(unittest.TestCase):
@@ -247,5 +247,18 @@ class MyTestCase(unittest.TestCase):
             o,
             y
         )
+
+    def test_wrong_arg(self):
+        class MyAutomaton(Automaton):
+            def process(self, data):
+                pass
+
+        class Foo(object): # isn't subclass of Automaton
+            pass
+
+        with self.assertRaises(AutomatonException):
+            o = MyAutomaton(
+                Foo()
+            )
 
 # TODO: "eating one char" by Char
