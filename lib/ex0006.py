@@ -2,6 +2,17 @@ import copy
 import abc
 
 
+def tail_length(iterator):
+    new_iterator = copy.deepcopy(iterator)
+    length = 0
+    while True:
+        try:
+            next(new_iterator)
+            length += 1
+        except StopIteration:
+            return length
+
+
 class AutomatonException(Exception):
     pass
 
@@ -134,22 +145,28 @@ class Seq(Automaton):
 
 class Or(Automaton):
     def process(self, data):
+        variants = []
+        errors = []
         for arg in self.args:
             c = copy.deepcopy(data)
             try:
                 c, r = arg.process(c)
-            except AutomatonException:
-                pass
+            except AutomatonException as e:
+                errors.append(e)
             else:
-                return c, r
-        c = copy.deepcopy(data)
-        try:
-            next_char = next(c)
-        except StopIteration:
-            next_char_desc = "Reached end of input"
+                variants.append((c, r))
+        if len(variants) == 0:
+            c = copy.deepcopy(data)
+            try:
+                next_char = next(c)
+            except StopIteration:
+                next_char_desc = "Reached end of input"
+            else:
+                next_char_desc = "Next char is {0}".format(next_char)
+            raise AutomatonException("Wasn't able to resolve Or rule (name={0}).".format(self.name) + next_char_desc + " Received error messages are {0}".format(repr(errors)))
         else:
-            next_char_desc = "Next char is {0}".format(next_char)
-        raise AutomatonException("Wasn't able to resolve Or rule (name={0}). ".format(self.name) + next_char_desc)
+            variants = sorted(variants, key=lambda x: tail_length(x[0]))
+            return variants[0]
 
 
 class Star(Automaton):

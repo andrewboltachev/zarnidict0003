@@ -1,5 +1,5 @@
 import unittest
-from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException, Automaton
+from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException, Automaton, tail_length
 
 
 class MyTestCase(unittest.TestCase):
@@ -312,4 +312,22 @@ class LengthTestCase(unittest.TestCase):
         self.assertEqual(
             o,
             y
+        )
+
+
+class TailLengthTestCase(unittest.TestCase):
+    def test_0001(self):
+        self.assertEqual(
+            tail_length(
+                iter([1, 2, 3])
+            ),
+            3
+        )
+
+    def test_0002(self):
+        self.assertEqual(
+            tail_length(
+                iter([])
+            ),
+            0
         )
