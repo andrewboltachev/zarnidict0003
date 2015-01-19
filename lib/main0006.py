@@ -7,6 +7,18 @@ import re
 import sys
 import os
 
+
+def get_last():
+    try:
+        with open('last.txt') as f:
+            return f.read().strip()
+    except:
+        return None
+
+def save_last(x):
+        with open('last.txt', 'w') as f:
+            f.write(x)
+
 text = []
 
 argv = sys.argv[1:]
@@ -76,7 +88,8 @@ def Plus(*args):
 
 преамбула = Посл(
     МожетБыть(Символ('pre')),
-    МожетБыть(Символ('end')),
+    МожетБыть(Символ('m1')),
+    НольИлиБольше(Символ('end')),
     МожетБыть(Символ('m1')),
 )
 
@@ -99,7 +112,7 @@ def Plus(*args):
 )
 
 собственно_ссылка = Посл(
-    Символ('ref'),
+    ОдинИлиБольше(Символ('ref')),
     МожетБыть(Символ('u')),
 )
 
@@ -125,13 +138,15 @@ def Plus(*args):
     ОдинИлиБольше(перевод)
 )
 
-статья_состоящая_только_из_преамбулы = Посл(
-    преамбула
+статья_без_перевода = Посл(
+    преамбула,
+    НольИлиБольше(пример),
+    МожетБыть(ссылка)
 )
 
 простая_статья = Либо(
     настоящая_статья,
-    статья_состоящая_только_из_преамбулы
+    статья_без_перевода,
 )
 
 статья_с_римскими_цифрами = Посл(
@@ -159,15 +174,22 @@ def Plus(*args):
     )
 )
 
-sm = Либо(
-    статья_с_литерами,
-    статья_с_римскими_цифрами,
-    простая_статья
+sm = Посл(
+    Либо(
+        статья_с_литерами,
+        статья_с_римскими_цифрами,
+        простая_статья
+    )
 )
 
 
 one = ord(u'Ⅰ')
 roman_numbers = [unichr(x) for x in range(one, one + 12)]
+
+
+last_last = get_last()
+last = None
+trigger = False
 
 for article in list(articles.items()):
     body = article[1]
@@ -231,16 +253,27 @@ for article in list(articles.items()):
     def perr(e='FAIL'):
         print(article[0], e)
         print('')
-        #jd(parsed2)
-    try:
-        r = sm.run(iter(parsed4))
-    except AutomatonException as e:
-        perr(e)
-        break
+        pprint.pprint(parsed2)
+
+    if (last_last is not None) and not trigger:
+        print(article[0], 'IGN')
+        if article[0] == last_last:
+            trigger = True
     else:
-        print(article[0], 'OK')
-        #jd(r.to_json_like())
-        sd(r.to_json_like())
-        print('')
-        print('')
-        print('')
+        try:
+            r = sm.run(iter(parsed4))
+        except AutomatonException as e:
+            perr(e)
+            break
+        else:
+            last = article[0]
+            print(article[0], 'OK')
+            #jd(r.to_json_like())
+            sd(r.to_json_like())
+            print('')
+            print('')
+            print('')
+
+
+if last is not None:
+    save_last(last)
