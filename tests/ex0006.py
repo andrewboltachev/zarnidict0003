@@ -81,6 +81,14 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(AutomatonException):
             o = g.run(x)
 
+    def test_Seq_short(self):
+        g = Seq(Char('a'), Char('b'))
+        x = iter([
+            InputChar('a'),
+        ])
+        with self.assertRaises(AutomatonException):
+            o = g.run(x)
+
     def test_Seq_to_json_like(self):
         g = Seq(Char('a'), Char('b'), name='name 1')
         x = iter([
