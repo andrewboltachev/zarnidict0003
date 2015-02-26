@@ -58,3 +58,16 @@ g.to_edn_like()
 g.to_edn_like()
         )
 
+    def test_MayBe(self):
+        a = Char('a', 'c1')
+
+        a_e = a.to_edn_like()
+
+        g = MayBe(a, name='s1')
+        print(g.args)
+        self.assertEqual(
+                {'type': 'MayBe', 'value': a_e, 'payload': 's1'},
+g.to_edn_like()
+        )
+
+
