@@ -5,7 +5,7 @@ from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, A
 class MyTestCase(unittest.TestCase):
     maxDiff = None
 
-    def tes1t_0001(self):
+    def test_0001(self):
         g = Or(
             Seq(
                 Char('a'),
@@ -17,9 +17,9 @@ class MyTestCase(unittest.TestCase):
             )
         )
         x = iter([
-            Char('a'),
+            InputChar('a'),
         ])
-        y = Node(Node(['a']))
+        y = SeqNode([InputChar('a')])
         self.assertEqual(
             g.run(x),
             y

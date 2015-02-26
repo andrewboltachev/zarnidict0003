@@ -6,6 +6,7 @@ import pprint
 import re
 import sys
 import os
+from collections import OrderedDict
 
 
 def get_last():
@@ -187,9 +188,12 @@ one = ord(u'Ⅰ')
 roman_numbers = [unichr(x) for x in range(one, one + 12)]
 
 
-last_last = get_last()
+last_last = None #get_last()
 last = None
 trigger = False
+
+
+r0 = OrderedDict()
 
 for article in list(articles.items()):
     body = article[1]
@@ -260,6 +264,9 @@ for article in list(articles.items()):
         if article[0] == last_last:
             trigger = True
     else:
+        #print(parsed4)
+        r0[article[0]] = parsed4
+        continue
         try:
             r = sm.run(iter(parsed4))
         except AutomatonException as e:
@@ -277,3 +284,6 @@ for article in list(articles.items()):
 
 if last is not None:
     save_last(last)
+
+
+print(json.dumps([[k, [{'type': 'InputChar', 'name': x.name, 'payload': x.payload } for x in v]] for k, v in r0.items()], ensure_ascii=False))
