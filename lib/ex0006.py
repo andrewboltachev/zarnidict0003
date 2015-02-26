@@ -221,6 +221,10 @@ class Star(Automaton):
             else:
                 seq.append(r)
                 c = c1
+    @property
+    def edn_value(self):
+        return self._x_to_edn_like(self.args[0])
+
 
 
 class MayBe(Automaton):
