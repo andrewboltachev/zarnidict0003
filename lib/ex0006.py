@@ -1,6 +1,13 @@
 import copy
 import abc
 
+def safe_list_get(t, idx, default):
+    l = list(t)
+    try:
+        return l[idx]
+    except IndexError:
+        return default
+
 
 def tail_length(iterator):
     new_iterator = copy.deepcopy(iterator)
@@ -93,10 +100,40 @@ class Automaton(object, metaclass=abc.ABCMeta):
     def node(self, data):
         return self.node_class(data, name=self.name, klass=self.__class__.__name__)
 
+    @property
+    def edn_value(self):
+        return list(map(self._x_to_edn_like, self.args))
+
+    @property
+    def edn_payload(self):
+        return self.name
+
+    def to_edn_like(self):
+        return {
+            'type': self.__class__.__name__,
+            'value': self.edn_value,
+            'payload': self.edn_payload,
+        }
+
+    @classmethod
+    def _x_to_edn_like(self, x):
+        if issubclass(x.__class__, Automaton):
+            return x.to_edn_like()
+        else:
+            return x
+
 
 class Char(Automaton):
     def check_args(self, args):
         pass
+
+    @property
+    def edn_value(self):
+        return self._x_to_edn_like(self.args[0])
+
+    @property
+    def edn_payload(self):
+        return safe_list_get(self.args, 1, None)
 
     def process(self, data):
         c = copy.deepcopy(data)
