@@ -1,3 +1,4 @@
+import json
 from lib.ex0006 import (
     Char, Seq, Or, Star, MayBe,
 )
@@ -113,3 +114,6 @@ sm = Посл(
     )
 )
 
+
+if __name__ == '__main__':
+    print(json.dumps(sm.to_edn_like(), ensure_ascii=False))
