@@ -1,12 +1,9 @@
 import unittest
 from ..lib.ex0008 import *
-import sys
-
-def perr(x):
-    sys.stderr.write(str(x) + '\n')
 
 
-class MyTestCase(unittest.TestCase):
+#class MyTestCase(unittest.TestCase):
+class MyTestCase(object):
     def te1st_int(self):
         self.assertEqual(
             f1(
@@ -34,5 +31,9 @@ class MyTestCase(unittest.TestCase):
 
 
 perr(mark_depth(
-                [[1], [[[1]]]]
-    ))
+    [[1], [[[1]]]]
+))
+
+perr(f1(
+    [[1], [[[1]]]]
+))
