@@ -9,41 +9,52 @@ def mark_depth(s1, depth=0):
     }
 
 
-def walk(f, s1):
+def walk_depth_maked(f, s1):
     perr('there is', s1)
     return {
             'depth': s1['depth'],
-            'data': list(map(lambda x: f(walk(f, x)), s1['data'])) if (isinstance(s1['data'], list)) else s1['data']
+            'data': list(map(lambda x: f(walk_depth_maked(f, x)), s1['data'])) if (isinstance(s1['data'], list)) else s1['data']
     }
+
+
+def walk(inner, outer, form):
+    #return list(map(lambda x: f(walk(f, x)), s1)) if (isinstance(s1, list)) else s1
+    if (isinstance(form, list)):
+        return outer(list(map(inner, form)))
+    if (isinstance(form, dict)):
+        return outer({k: inner(v) for k, v in form.items() })
+    else:
+        return outer(form)
+
+def postwalk(f, form):
+    return walk(lambda x: postwalk(f, x), f, form)
 
 
 def f1(ds):
     #counter = 0
 
-    marked_depth = mark_depth(ds)
+    all_of_size = []
 
-    all_of_size = {}
-
-    def find_or_create(depth, data):
-        if data in all_of_size[depth]:
-            return all_of_size[depth].index(data)
+    def find_or_create(data):
+        if data in all_of_size:
+            return all_of_size.index(data)
         else:
-            all_of_size[depth].append(data)
-            return len(all_of_size[depth])
+            all_of_size.append(data)
+            return len(all_of_size) - 1
 
     def harvester(x, current_depth):
         perr('coming', x)
         if isinstance(x, dict):
-            depth = x['depth']
-            if depth == current_depth:
-                if not depth in all_of_size:
-                    all_of_size[depth] = []
-                return {'depth': x['depth'], 'link': find_or_create(x['depth'], x['data'])}
+            return {'link': find_or_create(x)}
         return x
 
-    for depth in [4,3,2,1]:
-        this_harvester = lambda x: harvester(x, depth)
-        r = walk(this_harvester, marked_depth)
+    r = postwalk(find_or_create, ds)
 
-    perr(r)
-    return all_of_size
+    def remove_depth(x):
+        if isinstance(x, dict):
+            if set(x.keys()) == {'depth', 'data'}:
+                return x['data']
+        return x
+    perr('---')
+    perr(postwalk(remove_depth, r))
+    return list(enumerate(postwalk(remove_depth, all_of_size)))
