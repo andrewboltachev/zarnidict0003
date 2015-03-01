@@ -30,10 +30,6 @@ class MyTestCase(object):
             )
 
 
-perr(mark_depth(
-    [[1], [[[1]]]]
-))
-
 perr(f1(
     [[1], [[[1]]]]
 ))
