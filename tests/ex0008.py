@@ -31,5 +31,5 @@ class MyTestCase(object):
 
 
 perr(f1(
-    [[1], [[[1]]]]
+    [["a"], [[["a"]]]]
 ))
