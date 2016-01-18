@@ -2,6 +2,19 @@ import unittest
 from ..lib.ex0006 import Node, SeqNode, Char, Seq, Or, Star, MayBe, InputChar, AutomatonException, Automaton, tail_length
 
 
+class my_iter(object):
+    def __init__(self, value):
+        self.value = value
+        self.counter = -1
+
+    def __next__(self):
+        self.counter += 1
+        try:
+            return self.value[self.counter]
+        except IndexError:
+            raise StopIteration()
+
+
 class MyTestCase(unittest.TestCase):
     maxDiff = None
 
